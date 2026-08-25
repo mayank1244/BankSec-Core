@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BankSec Core | Open Banking & Financial Security Framework</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo-container">
+      <div class="logo-icon">
+        <i class="fa-solid fa-building-columns"></i>
+      </div>
+      <div class="logo-text">
+        <h1>BankSec Core</h1>
+        <p>Banking & Financial Security Assurance Engine</p>
+      </div>
+    </div>
+    
+    <div class="compliance-badges">
+      <span class="badge-tag"><i class="fa-solid fa-lock"></i> FAPI 1.0/2.0</span>
+      <span class="badge-tag"><i class="fa-solid fa-credit-card"></i> PCI-DSS v4.0</span>
+      <span class="badge-tag"><i class="fa-solid fa-shield-halved"></i> OWASP ASVS-L3</span>
+      <span class="badge-tag"><i class="fa-solid fa-key"></i> PSD2 RTS</span>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="container">
+
+    <!-- Metrics Banner -->
+    <header class="summary-banner">
+      <div class="metric-card">
+        <div class="metric-header">
+          <span>Target Standard</span>
+          <i class="fa-solid fa-award"></i>
+        </div>
+        <div class="metric-value">ASVS Level 3</div>
+        <div class="metric-desc">Highest financial application security rating</div>
+      </div>
+
+      <div class="metric-card accent-cyan">
+        <div class="metric-header">
+          <span>Total Controls</span>
+          <i class="fa-solid fa-list-check"></i>
+        </div>
+        <div class="metric-value">11 Controls</div>
+        <div class="metric-desc">Across 5 core banking domains</div>
+      </div>
+
+      <div class="metric-card accent-amber">
+        <div class="metric-header">
+          <span>Threat Protection</span>
+          <i class="fa-solid fa-shield-virus"></i>
+        </div>
+        <div class="metric-value">Anti-Replay / SCA</div>
+        <div class="metric-desc">Mitigating transaction tampering & ATO</div>
+      </div>
+
+      <div class="metric-card accent-indigo">
+        <div class="metric-header">
+          <span>Audit Engine</span>
+          <i class="fa-solid fa-calculator"></i>
+        </div>
+        <div class="metric-value" id="scoreText">0%</div>
+        <div class="metric-desc" id="complianceGrade">CALCULATING...</div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs-navigation">
+      <button class="tab-btn active" data-tab="scannerTab">
+        <i class="fa-solid fa-radar"></i> Live Real-Time Scanner
+      </button>
+      <button class="tab-btn" data-tab="overviewTab">
+        <i class="fa-solid fa-cubes"></i> Security Framework
+      </button>
+      <button class="tab-btn" data-tab="auditTab">
+        <i class="fa-solid fa-clipboard-check"></i> Interactive Audit
+      </button>
+      <button class="tab-btn" data-tab="owaspTab">
+        <i class="fa-solid fa-shield-virus"></i> OWASP Cross-Check
+      </button>
+      <button class="tab-btn" data-tab="threatsTab">
+        <i class="fa-solid fa-bug"></i> Threat Matrix
+      </button>
+    </nav>
+
+    <!-- TAB 0: Live Real-Time Scanner (NEW) -->
+    <section id="scannerTab" class="tab-content active">
+      <div class="audit-container">
+        <div style="margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 4px;">Live Real-Time Banking API & App Scanner</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Enter any web application or banking API endpoint URL to run live security header, TLS, CORS, and rate-limiting scans.</p>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap;">
+          <input type="url" id="targetUrlInput" placeholder="Enter target URL (e.g. http://demo.testfire.net or https://httpbin.org/get)" 
+                 value="http://demo.testfire.net" 
+                 style="flex: 1; min-width: 300px; padding: 12px 16px; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: #fff; font-family: var(--font-mono); font-size: 0.9rem;">
+          <button class="btn-remediation" id="startScanBtn" onclick="runRealtimeScan()" style="width: auto; padding: 12px 24px; font-size: 0.95rem;">
+            <i class="fa-solid fa-play"></i> Launch Real-Time Scan
+          </button>
+        </div>
+
+        <!-- Scan Progress & Results -->
+        <div id="scanResultsArea" style="display: none;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="metric-card">
+              <div class="metric-header"><span>Target Host</span><i class="fa-solid fa-globe"></i></div>
+              <div class="metric-value" id="resHost" style="font-size: 1.2rem; word-break: break-all;">--</div>
+            </div>
+            <div class="metric-card accent-cyan">
+              <div class="metric-header"><span>HTTPS / TLS Enforced</span><i class="fa-solid fa-lock"></i></div>
+              <div class="metric-value" id="resHttps" style="font-size: 1.2rem;">--</div>
+            </div>
+            <div class="metric-card accent-amber">
+              <div class="metric-header"><span>Security Headers Passed</span><i class="fa-solid fa-shield"></i></div>
+              <div class="metric-value" id="resHeaderScore" style="font-size: 1.2rem;">0 / 5</div>
+            </div>
+          </div>
+
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">Live Scan Console Output</h3>
+          <div class="code-box" id="scanConsoleLog" style="height: 250px; overflow-y: auto; margin-bottom: 1.5rem; font-size: 0.8rem; background: #020408;">
+            Initializing BankSec Real-Time Prober...
+          </div>
+
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;">Automated Security Findings</h3>
+          <div id="findingsContainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: Security Framework Overview -->
+    <section id="overviewTab" class="tab-content">
+      <div id="controlsContainer"></div>
+    </section>
+
+    <!-- TAB 2: Interactive Audit Engine -->
+    <section id="auditTab" class="tab-content">
+      <div class="audit-container">
+        <div class="audit-header">
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 4px;">Banking Security Compliance Auditor</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;">Evaluate your financial web/mobile application against BankSec controls.</p>
+            <span style="font-size: 0.75rem; background: rgba(99, 102, 241, 0.15); border: 1px solid var(--accent-indigo); color: var(--accent-cyan); padding: 4px 10px; border-radius: 12px; font-weight: 600;">
+              <i class="fa-solid fa-lock"></i> READ-ONLY AUDIT (Automated & Verification-Driven)
+            </span>
+          </div>
+          
+          <div class="score-dial-box">
+            <div class="dial-circle" id="scoreDial">
+              <span class="dial-score" id="scoreTextDial">--</span>
+            </div>
+            <button class="btn-remediation" style="padding: 10px 18px;" onclick="exportAuditReport()">
+              <i class="fa-solid fa-download"></i> Export JSON Report
+            </button>
+          </div>
+        </div>
+
+        <div id="auditListContainer"></div>
+      </div>
+    </section>
+
+    <!-- TAB 4: OWASP Benchmark Cross-Check (NEW) -->
+    <section id="owaspTab" class="tab-content">
+      <div class="audit-container">
+        <div style="margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 4px;">OWASP Top 10 & OWASP ZAP Cross-Check Matrix</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Benchmarking BankSec Core controls against OWASP Top 10 vulnerabilities, OWASP ASVS-L3 verification requirements, and OWASP ZAP scanner alerts.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <div class="control-card">
+            <div class="control-top">
+              <span class="control-id">OWASP A01:2021</span>
+              <span class="severity-pill severity-CRITICAL">CRITICAL</span>
+            </div>
+            <h3>Broken Access Control & FAPI DPoP</h3>
+            <p><strong>OWASP Definition:</strong> Access control enforces policy such that users cannot act outside of their intended permissions.</p>
+            <div style="background: rgba(255,255,255,0.04); padding: 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 10px;">
+              <strong style="color: var(--primary-emerald);">BankSec Core Equivalent:</strong> Control <code>AUTH-01</code> (FAPI DPoP Enforcer) & <code>AUTH-02</code> (PSD2 SCA Dynamic Linking).
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-top">
+              <span class="control-id">OWASP A02:2021</span>
+              <span class="severity-pill severity-CRITICAL">CRITICAL</span>
+            </div>
+            <h3>Cryptographic Failures</h3>
+            <p><strong>OWASP Definition:</strong> Failures related to cryptography (or lack thereof) which often lead to sensitive data exposure or key compromise.</p>
+            <div style="background: rgba(255,255,255,0.04); padding: 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 10px;">
+              <strong style="color: var(--primary-emerald);">BankSec Core Equivalent:</strong> Control <code>DATA-01</code> (PAN Tokenization) & <code>DATA-02</code> (HSM Envelope Encryption).
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-top">
+              <span class="control-id">OWASP A05:2021</span>
+              <span class="severity-pill severity-HIGH">HIGH</span>
+            </div>
+            <h3>Security Misconfiguration (Headers & CORS)</h3>
+            <p><strong>OWASP Definition:</strong> Missing security hardening, insecure default configurations, open cloud storage, or unsecure HTTP headers.</p>
+            <div style="background: rgba(255,255,255,0.04); padding: 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 10px;">
+              <strong style="color: var(--primary-emerald);">BankSec Core Equivalent:</strong> Live Probes for <code>HSTS</code>, <code>CSP</code>, <code>X-Frame-Options</code>, <code>CORS *</code>, and <code>Server Banner Leakage</code>.
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-top">
+              <span class="control-id">OWASP A07:2021</span>
+              <span class="severity-pill severity-HIGH">HIGH</span>
+            </div>
+            <h3>Identification & Authentication Failures</h3>
+            <p><strong>OWASP Definition:</strong> Confirmation of user identity, authentication, and session management failures.</p>
+            <div style="background: rgba(255,255,255,0.04); padding: 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 10px;">
+              <strong style="color: var(--primary-emerald);">BankSec Core Equivalent:</strong> Control <code>AUTH-03</code> (Session Inactivity Monitor & Cookie <code>HttpOnly</code>/<code>Secure</code> Verification).
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-top">
+              <span class="control-id">OWASP API4:2023</span>
+              <span class="severity-pill severity-CRITICAL">CRITICAL</span>
+            </div>
+            <h3>Unrestricted Resource Consumption</h3>
+            <p><strong>OWASP Definition:</strong> API endpoints that do not restrict request rates or payload sizes, permitting DoS or scraping attacks.</p>
+            <div style="background: rgba(255,255,255,0.04); padding: 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 10px;">
+              <strong style="color: var(--primary-emerald);">BankSec Core Equivalent:</strong> Control <code>API-02</code> (Adaptive Token Bucket Rate Limiter & Burst Request Probe).
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-top">
+              <span class="control-id">OWASP API8:2023</span>
+              <span class="severity-pill severity-CRITICAL">CRITICAL</span>
+            </div>
+            <h3>Lack of Protection Against Replay Attacks</h3>
+            <p><strong>OWASP Definition:</strong> APIs that accept duplicate or replayed financial transaction requests without nonce or signature verification.</p>
+            <div style="background: rgba(255,255,255,0.04); padding: 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 10px;">
+              <strong style="color: var(--primary-emerald);">BankSec Core Equivalent:</strong> Control <code>TXN-01</code> (HMAC Request Signing) & <code>TXN-02</code> (Redis Idempotency Locking).
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Threat Matrix -->
+    <section id="threatsTab" class="tab-content">
+      <div style="margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 4px;">Financial Threat Vectors & Attack Scenarios</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Common attack patterns targeting core banking APIs, wire transfers, and open banking protocols.</p>
+      </div>
+      <div id="threatsContainer"></div>
+    </section>
+
+  </main>
+
+  <!-- Code Remediation Modal -->
+  <div class="modal-overlay" id="remediationModal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+      <h3 id="modalTitle" style="font-size: 1.2rem; font-weight: 700; margin-bottom: 4px;">Control Title</h3>
+      <p id="modalSubtitle" style="color: var(--primary-emerald); font-weight: 600; font-size: 0.85rem;"></p>
+      
+      <div class="code-box" id="modalCode"></div>
+    </div>
+  </div>
+
+  <!-- JavaScript Datasets & Application Logic -->
+  <script src="data/banking-framework.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
