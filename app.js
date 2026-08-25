@@ -417,11 +417,9 @@ function renderFindingsUI(findings) {
     </div>
   `;
 }
-}
 
 // Export Audit Report
 function exportAuditReport() {
-
   const reportData = {
     timestamp: new Date().toISOString(),
     tool: "BankSec Core v1.0 - Financial Security Auditor",
