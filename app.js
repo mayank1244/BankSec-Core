@@ -339,7 +339,9 @@ async function runRealtimeScan() {
   document.getElementById('resHeaderScore').innerText = `${data.headerScore || 0} / 5`;
   log(`📊 Security Header Score: ${data.headerScore || 0} / 5`);
 
-  const findings = data.findings || [];
+  if (data.findings && data.findings.length > 0) {
+    findings = data.findings;
+  }
 
   // Update auditState for ALL controls accurately
   auditState['API-01'] = data.isHttps ? 'PASS' : 'FAIL';
