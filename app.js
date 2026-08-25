@@ -6,6 +6,17 @@ function initApp() {
   renderAuditChecklist();
   renderThreatVectors();
   initModal();
+  bindScannerButton();
+}
+
+function bindScannerButton() {
+  const startBtn = document.getElementById('startScanBtn');
+  if (startBtn) {
+    startBtn.onclick = function(e) {
+      if (e) e.preventDefault();
+      runRealtimeScan();
+    };
+  }
 }
 
 if (document.readyState === 'loading') {
@@ -13,6 +24,7 @@ if (document.readyState === 'loading') {
 } else {
   initApp();
 }
+window.addEventListener('load', initApp);
 
 // Tab Navigation
 function initTabs() {
@@ -419,3 +431,8 @@ function exportAuditReport() {
   a.download = `BankSec-Audit-Report-${Date.now()}.json`;
   a.click();
 }
+
+// Global scope window exports
+window.runRealtimeScan = runRealtimeScan;
+window.openRemediationModal = openRemediationModal;
+window.exportAuditReport = exportAuditReport;
