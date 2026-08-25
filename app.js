@@ -1,12 +1,18 @@
 let auditState = {};
 
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   initTabs();
   renderFrameworkOverview();
   renderAuditChecklist();
   renderThreatVectors();
   initModal();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 // Tab Navigation
 function initTabs() {
