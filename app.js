@@ -20,13 +20,17 @@ function initTabs() {
   const contents = document.querySelectorAll('.tab-content');
 
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
+    tab.addEventListener('click', (e) => {
+      if (e) e.preventDefault();
       tabs.forEach(t => t.classList.remove('active'));
       contents.forEach(c => c.classList.remove('active'));
 
       tab.classList.add('active');
       const targetId = tab.dataset.tab;
-      document.getElementById(targetId).classList.add('active');
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        targetEl.classList.add('active');
+      }
     });
   });
 }
@@ -198,13 +202,14 @@ function openRemediationModal(controlId) {
 
 // Real-Time Security Scanner Logic (100% Client-Side Engine for Streamlit & Standalone Web)
 async function runRealtimeScan() {
-  const urlInput = document.getElementById('targetUrlInput');
-  const targetUrl = urlInput ? urlInput.value.trim() : '';
+  try {
+    const urlInput = document.getElementById('targetUrlInput');
+    const targetUrl = urlInput ? urlInput.value.trim() : '';
 
-  if (!targetUrl) {
-    alert("Please enter a valid target URL (e.g. https://ai-trading-analyst-mw6zuofd4fpemjkqlmydgg.streamlit.app/ or http://demo.testfire.net)");
-    return;
-  }
+    if (!targetUrl) {
+      alert("Please enter a valid target URL (e.g. https://ai-trading-analyst-mw6zuofd4fpemjkqlmydgg.streamlit.app/ or http://demo.testfire.net)");
+      return;
+    }
 
   const resultsArea = document.getElementById('scanResultsArea');
   const consoleLog = document.getElementById('scanConsoleLog');
@@ -349,6 +354,14 @@ async function runRealtimeScan() {
   log(`🎉 REAL-TIME SCAN COMPLETED! Audit score and report updated.`);
   startBtn.disabled = false;
   startBtn.innerHTML = `<i class="fa-solid fa-play"></i> Launch Real-Time Scan`;
+  } catch (globalErr) {
+    console.error("Scan error:", globalErr);
+    const startBtn = document.getElementById('startScanBtn');
+    if (startBtn) {
+      startBtn.disabled = false;
+      startBtn.innerHTML = `<i class="fa-solid fa-play"></i> Launch Real-Time Scan`;
+    }
+  }
 }
 
 function renderFindingsUI(findings) {
