@@ -32,8 +32,8 @@ const server = http.createServer((req, res) => {
 
   const parsedReq = new URL(req.url, `http://localhost:${PORT}`);
 
-  // API Endpoint: /api/scan?url=<TARGET_URL>
-  if (parsedReq.pathname === '/api/scan') {
+  // API Endpoint: /api/scan?url=<TARGET_URL> or /?api=scan&url=<TARGET_URL>
+  if (parsedReq.pathname === '/api/scan' || parsedReq.searchParams.get('api') === 'scan') {
     const targetUrlStr = parsedReq.searchParams.get('url');
     if (!targetUrlStr) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
